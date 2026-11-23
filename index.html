@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#A8322B">
+<title>赣州红色客家三日游大环线</title>
+<style>
+/* =========================================================
+   设计画布 750 × 812
+   1rem = 10 设计像素（75rem = 750）；竖向 100dvh 撑满
+   ========================================================= */
+:root{
+  --red:#A8322B;  --red-d:#7C1F1A;  --ochre:#B4763C;  --wood:#6E4B33;  --wood-d:#4A3122;
+  --paper:#F3E9D8; --paper-2:#EADCC3; --ink:#2E2A26; --ink-2:#5C5348;
+  --pine:#4C6B57;  --gold:#C9A227;
+  --shadow:0 1.2rem 3rem rgba(74,49,34,.22);
+  --navh:12.6rem;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:min(calc(100vw / 75), 10px);}
+body{margin:0;background:#241E19;color:var(--ink);
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;overflow:hidden;}
+#stage{position:relative;width:100%;max-width:750px;height:100dvh;margin:0 auto;
+  background:var(--paper);overflow:hidden;box-shadow:0 0 6rem rgba(0,0,0,.4);}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;opacity:.2;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.55'/></svg>");}
+#stage::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:89;
+  background:radial-gradient(120% 80% at 50% 45%,rgba(0,0,0,0) 52%,rgba(60,40,25,.18) 100%);}
+
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  opacity:0;transform:translateY(2rem);pointer-events:none;
+  transition:opacity .34s ease,transform .34s cubic-bezier(.2,.8,.3,1);
+  padding-bottom:calc(var(--navh) + env(safe-area-inset-bottom) + 2rem);}
+.screen.on{opacity:1;transform:none;pointer-events:auto;z-index:5;}
+.screen.out{opacity:0;transform:translateY(-1.4rem);}
+
+/* ================= 首页：Day1/2/3 ================= */
+#home{padding-bottom:0;overflow-y:auto;}
+.home-head{text-align:center;padding:calc(5rem + env(safe-area-inset-top)) 5rem 2.4rem;}
+.home-head h1{margin:0;font-size:4.9rem;line-height:1.26;letter-spacing:.08em;color:var(--red-d);
+  font-family:"Songti SC","Source Han Serif SC",serif;text-shadow:0 .2rem 0 rgba(255,255,255,.7);}
+.home-head .sub{margin-top:1rem;font-size:2rem;letter-spacing:.28em;color:var(--wood);}
+.home-head .line{width:14rem;height:2px;margin:1.8rem auto 0;
+  background:linear-gradient(90deg,transparent,rgba(110,75,51,.55),transparent);}
+
+.days{display:flex;flex-direction:column;gap:3.2rem;padding:0 3.6rem;}
+.daycard{border-radius:2rem;overflow:hidden;background:#FFFBF2;box-shadow:var(--shadow);
+  border:1px solid rgba(110,75,51,.12);animation:up .5s ease both;}
+.daycard{opacity:1}.daycard:nth-child(1){animation-delay:.04s}
+.daycard:nth-child(2){animation-delay:.12s}
+.daycard:nth-child(3){animation-delay:.2s}
+@keyframes up{from{transform:translateY(2rem)}to{transform:none}}
+.daycard .pic{position:relative;display:block;width:100%;height:31rem;overflow:hidden;cursor:pointer;background:#E3D3B6;}
+.daycard .pic img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+.daycard .pic:active img{transform:scale(1.03);}
+.daycard .pic .tag{position:absolute;left:2rem;top:2rem;color:#fff;font-size:2rem;letter-spacing:.18em;
+  padding:.6rem 1.6rem;border-radius:.9rem;background:var(--red);box-shadow:0 .6rem 1.6rem rgba(0,0,0,.3);}
+.daycard .pic .enter{position:absolute;right:1.8rem;bottom:1.8rem;color:#fff;font-size:2.1rem;letter-spacing:.1em;
+  padding:.8rem 2rem;border-radius:99rem;background:rgba(36,26,18,.62);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.28);}
+.daycard .txt{padding:2.2rem 2.6rem 2.4rem;}
+.daycard .txt h3{margin:0;font-size:3.4rem;letter-spacing:.06em;color:var(--red-d);font-family:"Songti SC",serif;}
+.daycard .txt .theme{margin:.6rem 0 1.6rem;font-size:2.2rem;color:var(--ink-2);letter-spacing:.04em;}
+.daycard .subs{list-style:none;margin:0;padding:1.4rem 0 0;border-top:1px dashed rgba(110,75,51,.3);
+  display:flex;flex-wrap:wrap;gap:.9rem 1.6rem;}
+.daycard .subs li{font-size:2.1rem;color:var(--wood-d);letter-spacing:.04em;position:relative;padding-left:1.8rem;}
+.daycard .subs li::before{content:"";position:absolute;left:0;top:.85em;width:.9rem;height:.9rem;border-radius:50%;
+  background:var(--ochre);opacity:.8;}
+.daycard[data-day="1"] .subs li::before{background:var(--red);}
+.daycard[data-day="3"] .subs li::before{background:var(--pine);}
+.home-note{text-align:center;font-size:1.9rem;letter-spacing:.08em;color:rgba(74,49,34,.7);
+  padding:3.4rem 3rem calc(3rem + env(safe-area-inset-bottom));}
+
+/* ================= 内页通用 ================= */
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:1.4rem;
+  padding:calc(3rem + env(safe-area-inset-top)) 3.2rem 1.4rem;
+  background:linear-gradient(180deg,rgba(243,233,216,.97) 60%,rgba(243,233,216,0));}
+.top .back{width:5.6rem;height:5.6rem;border-radius:50%;flex:0 0 auto;border:1px solid rgba(110,75,51,.28);
+  background:rgba(255,250,242,.92);color:var(--wood-d);font-size:3rem;line-height:1;display:flex;
+  align-items:center;justify-content:center;}
+.top .ttl{font-size:2.6rem;font-weight:700;letter-spacing:.05em;}
+.top .day{margin-left:auto;font-size:1.9rem;letter-spacing:.14em;color:#fff;padding:.5rem 1.4rem;border-radius:.8rem;}
+
+.hero{position:relative;height:42rem;overflow:hidden;background:#E3D3B6;}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.hero .veil{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(36,26,18,.10) 0%,rgba(36,26,18,0) 40%,rgba(243,233,216,.99) 100%);}
+.hero .cap{position:absolute;left:3.6rem;right:3.6rem;bottom:2.2rem;}
+.hero .cap .no{display:inline-flex;align-items:center;justify-content:center;width:4.4rem;height:4.4rem;
+  border-radius:50%;background:var(--red);color:#fff;font-size:2.2rem;box-shadow:0 .6rem 1.4rem rgba(124,31,26,.35);}
+.hero .cap h2{margin:1rem 0 .4rem;font-size:4.4rem;line-height:1.2;letter-spacing:.06em;color:var(--red-d);
+  font-family:"Songti SC",serif;}
+.hero .cap .lead{font-size:2.3rem;color:var(--ink-2);letter-spacing:.03em;}
+
+.body{padding:2.4rem 3.6rem 0;}
+.rule{display:flex;align-items:center;gap:1.4rem;margin:0 0 2rem;}
+.rule::before,.rule::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(110,75,51,.4),transparent);}
+.rule span{font-size:1.9rem;letter-spacing:.26em;color:var(--wood);}
+.body p{font-size:2.55rem;line-height:1.95;margin:0 0 1.8rem;color:#3B352D;text-align:justify;}
+.body p::first-letter{font-size:3.1rem;color:var(--red);font-family:"Songti SC",serif;}
+
+.strip{padding:1.4rem 0 0;}
+.strip .hd{display:flex;align-items:baseline;justify-content:space-between;padding:0 3.6rem .8rem;}
+.strip .hd b{font-size:2.2rem;letter-spacing:.1em;color:var(--wood-d);}
+.strip .hd em{font-size:1.8rem;color:var(--ink-2);font-style:normal;}
+.strip .rail{display:flex;gap:1.6rem;overflow-x:auto;padding:.6rem 3.6rem 1.4rem;scroll-snap-type:x mandatory;}
+.strip .rail::-webkit-scrollbar{display:none;}
+.strip .rail figure{margin:0;position:relative;flex:0 0 30rem;scroll-snap-align:start;border-radius:1.8rem;overflow:hidden;
+  background:#E3D3B6;box-shadow:0 .8rem 2rem rgba(74,49,34,.16);}
+.strip .rail .ph{width:100%;height:20rem;display:block;object-fit:cover;}
+.strip .rail figcaption{font-size:1.8rem;color:var(--ink-2);padding:.9rem 1.2rem;background:#FFFBF2;}
+
+/* ================= 底部大号翻页导航（全站固定） ================= */
+.snav{
+  position:absolute;left:0;right:0;bottom:0;z-index:60;height:calc(var(--navh) + env(safe-area-inset-bottom));
+  padding:1.6rem 2.4rem calc(1.6rem + env(safe-area-inset-bottom));
+  display:none;align-items:center;gap:1.4rem;
+  background:linear-gradient(180deg,#8A231D,#5E1410);
+  box-shadow:0 -1rem 3rem rgba(0,0,0,.28);
+  border-top:1px solid rgba(255,220,170,.28);
+}
+.snav.on{display:flex;}
+.snav .ar{
+  width:8.4rem;height:8.4rem;border-radius:50%;flex:0 0 auto;border:0;padding:0;
+  background:radial-gradient(circle at 35% 30%,#FFF6E2,#EAD9B8 70%,#D9C39B);
+  color:var(--red-d);font-size:5rem;line-height:1;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 .6rem 1.6rem rgba(0,0,0,.32),inset 0 2px 0 rgba(255,255,255,.9);
+  transition:transform .15s ease;
+}
+.snav .ar:active{transform:scale(.93);}
+.snav .ar.dim{opacity:.42;}
+.snav .mid{flex:1;min-width:0;text-align:center;color:#FFF3DC;}
+.snav .mid b{display:block;font-size:1.9rem;letter-spacing:.28em;opacity:.85;font-weight:500;}
+.snav .mid span{display:block;font-size:2.9rem;letter-spacing:.06em;margin-top:.3rem;
+  font-family:"Songti SC",serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.snav .mid em{display:block;font-size:1.7rem;letter-spacing:.1em;opacity:.62;font-style:normal;margin-top:.2rem;}
+
+/* ================= 重点页 A：叶坪科普板 ================= */
+#yeping{overflow:hidden;background:#241D18;padding-bottom:0;}
+.corr-stage{position:absolute;inset:0;overflow:hidden;background:linear-gradient(180deg,#3A2B21 0%,#2A211A 46%,#1E1814 100%);}
+.corr-stage .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+.corr-stage .corr-veil{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(72% 62% at 50% 46%,rgba(10,6,4,.08),rgba(10,6,4,.62) 100%),
+             linear-gradient(180deg,rgba(12,8,6,.55) 0%,rgba(12,8,6,.12) 34%,rgba(12,8,6,.16) 62%,rgba(12,8,6,.62) 100%);}
+.corr{position:absolute;inset:0 0 var(--navh) 0;perspective:78rem;perspective-origin:50% 44%;}
+.wall{position:absolute;top:14%;height:54%;width:34%;transform-style:preserve-3d;}
+.wall.l{left:0;transform-origin:100% 50%;transform:rotateY(52deg);}
+.wall.r{right:0;transform-origin:0% 50%;transform:rotateY(-52deg);}
+.floor{position:absolute;left:0;right:0;bottom:0;height:22%;display:none;}
+.ceil{position:absolute;left:0;right:0;top:0;height:22%;display:none;}
+.gate{position:absolute;left:50%;top:32%;width:22%;height:30%;transform:translateX(-50%);display:none;}
+.wall .plank{position:absolute;left:8%;width:84%;height:14.6%;border-radius:.7rem;cursor:pointer;
+  background:linear-gradient(180deg,#C08A4E,#8C5A31 62%,#6E4426);
+  border:1px solid #E4C08A;box-shadow:0 .5rem 1.2rem rgba(0,0,0,.45),inset 0 1px 0 rgba(255,235,200,.5);
+  transition:transform .22s ease,filter .22s ease;display:flex;align-items:center;justify-content:space-between;
+  padding:0 1rem;overflow:hidden;}
+.wall .plank span{font-size:1.5rem;color:#F6E3C2;letter-spacing:.1em;opacity:.85;}
+.wall .plank b{font-family:"Songti SC",serif;font-size:1.55rem;color:#FFF0D2;font-weight:600;
+  max-width:64%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.wall .plank.read{filter:saturate(.45) brightness(.72);}
+.wall .plank.read::after{content:"✓";position:absolute;right:.6rem;top:.3rem;color:#9CE0A8;font-size:1.5rem;}
+.wall .plank:active{transform:translateX(.4rem) scale(.98);filter:brightness(1.18);}
+.wall .plank:nth-child(1){top:6%}.wall .plank:nth-child(2){top:23%}.wall .plank:nth-child(3){top:40%}
+.wall .plank:nth-child(4){top:57%}.wall .plank:nth-child(5){top:74%}
+.corr-top{position:absolute;left:0;right:0;top:calc(2.6rem + env(safe-area-inset-top));z-index:14;
+  display:flex;align-items:center;gap:1.2rem;padding:0 3rem;}
+.corr-top .back{width:5.2rem;height:5.2rem;border-radius:50%;border:1px solid rgba(243,225,196,.3);
+  background:rgba(30,24,20,.55);color:#F3E1C4;font-size:2.8rem;display:flex;align-items:center;justify-content:center;}
+.corr-top .info{font-size:2.1rem;color:#F3E1C4;letter-spacing:.05em;opacity:.9;}
+.corr-top .cnt{margin-left:auto;font-size:1.9rem;color:#F3E1C4;opacity:.8;letter-spacing:.08em;}
+.corr-hint{position:absolute;left:50%;bottom:calc(var(--navh) + 2.2rem + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:12;font-size:1.9rem;letter-spacing:.08em;color:#F3E1C4;background:rgba(30,24,20,.62);
+  padding:.8rem 1.8rem;border-radius:99rem;border:1px solid rgba(243,225,196,.25);backdrop-filter:blur(4px);
+  animation:breathe 2.6s ease-in-out infinite;white-space:nowrap;}
+@keyframes breathe{0%,100%{opacity:.7}50%{opacity:1}}
+.board-modal{position:absolute;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:3rem;}
+.board-modal.on{display:flex;}
+.board-modal .mask{position:absolute;inset:0;background:rgba(20,14,10,.74);backdrop-filter:blur(4px);}
+.board-card{position:relative;width:100%;max-width:56rem;border-radius:1.8rem;overflow:hidden;
+  background:linear-gradient(180deg,#EFD9AE,#D9B47F 55%,#C89C63);border:3px solid #7C5230;
+  box-shadow:0 3rem 7rem rgba(0,0,0,.55),inset 0 0 0 2px rgba(255,240,210,.5);animation:pop .3s cubic-bezier(.2,.9,.3,1);}
+@keyframes pop{from{transform:scale(.9) translateY(1rem);opacity:0}to{transform:none;opacity:1}}
+.board-card .bar{height:.9rem;background:linear-gradient(90deg,#A8322B,#C9A227)}
+.board-card .inner{padding:3rem 3.2rem 3.2rem;min-height:36rem;display:flex;flex-direction:column;}
+.board-card .no{font-size:1.9rem;letter-spacing:.22em;color:#7C1F1A;}
+.board-card h3{margin:1.1rem 0 1.5rem;font-size:3.5rem;line-height:1.34;color:#4A2B1A;
+  font-family:"Songti SC",serif;}
+.board-card p{margin:0;font-size:2.5rem;line-height:2;color:#5B3B24;text-align:justify;}
+.board-card .foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding-top:2rem;}
+.board-card .nav{display:flex;gap:1.2rem;}
+.board-card .nav button{width:6rem;height:6rem;border-radius:50%;border:0;background:rgba(124,31,26,.12);
+  color:#7C1F1A;font-size:3rem;line-height:1;}
+.board-card .dots{font-size:2rem;letter-spacing:.14em;color:#7C1F1A;opacity:.8;}
+.board-card .close{position:absolute;right:1.4rem;top:1.6rem;width:4.6rem;height:4.6rem;border-radius:50%;
+  border:0;background:rgba(74,43,26,.12);color:#4A2B1A;font-size:2.4rem;}
+
+/* ================= 重点页 B：雷击树 ================= */
+#leiji{overflow:hidden;padding-bottom:0;}
+.tree-stage{position:absolute;inset:0 0 var(--navh) 0;overflow:hidden;background:#2A211A;}
+.tree-stage .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.tree-stage.shake{animation:quake .5s cubic-bezier(.36,.07,.19,.97);}
+@keyframes quake{10%,90%{transform:translate(-.3rem,.2rem)}20%,80%{transform:translate(.5rem,-.3rem)}
+30%,50%,70%{transform:translate(-.8rem,.4rem)}40%,60%{transform:translate(.8rem,-.4rem)}}
+.leiji-top{position:absolute;left:0;right:0;top:calc(2.6rem + env(safe-area-inset-top));z-index:20;
+  display:flex;align-items:center;gap:1.2rem;padding:0 3rem;}
+.leiji-top .back{width:5.2rem;height:5.2rem;border-radius:50%;border:1px solid rgba(255,255,255,.35);
+  background:rgba(20,14,10,.5);color:#F3E1C4;font-size:2.8rem;display:flex;align-items:center;justify-content:center;}
+.leiji-top .t{color:#FFF6E6;font-size:2.6rem;letter-spacing:.08em;text-shadow:0 2px 10px rgba(0,0,0,.65);}
+.veil-top{position:absolute;left:0;right:0;top:0;height:16%;z-index:18;pointer-events:none;
+  background:linear-gradient(180deg,rgba(30,22,16,.5),rgba(30,22,16,0));}
+.drawer{position:absolute;left:0;right:0;bottom:0;z-index:22;border-radius:2.6rem 2.6rem 0 0;
+  background:linear-gradient(180deg,rgba(243,233,216,.97),rgba(234,220,195,.99));
+  box-shadow:0 -2rem 4rem rgba(0,0,0,.35);padding:1.4rem 3.2rem 2.4rem;
+  transform:translateY(calc(100% - 9.4rem));transition:transform .38s cubic-bezier(.22,.9,.3,1);
+  max-height:62%;display:flex;flex-direction:column;}
+.drawer.open{transform:translateY(0);}
+.drawer .grip{width:8rem;height:.7rem;border-radius:99rem;background:rgba(110,75,51,.3);margin:0 auto 1.2rem;}
+.drawer h3{margin:0 0 1rem;font-size:2.9rem;color:var(--red-d);font-family:"Songti SC",serif;
+  letter-spacing:.05em;display:flex;align-items:baseline;gap:.8rem;}
+.drawer h3 em{font-size:1.8rem;color:var(--wood);font-style:normal;opacity:.85;}
+.drawer .txt{overflow-y:auto;font-size:2.25rem;line-height:1.95;color:#3B352D;}
+.drawer .txt p{margin:0 0 1.1rem;}
+.fire-btn{position:absolute;right:3rem;bottom:calc(10rem + env(safe-area-inset-bottom));z-index:26;
+  width:12.4rem;height:12.4rem;border-radius:50%;border:0;
+  background:radial-gradient(circle at 35% 30%,#E4703F,#A8322B 62%,#7C1F1A);color:#FFF3DC;
+  font-size:2.3rem;line-height:1.3;letter-spacing:.05em;font-weight:700;
+  box-shadow:0 1.4rem 3rem rgba(124,31,26,.55),0 0 0 .6rem rgba(255,220,160,.16),inset 0 2px 0 rgba(255,255,255,.35);
+  animation:pulseBtn 2.2s ease-in-out infinite;}
+@keyframes pulseBtn{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.fire-btn:active{transform:scale(.94);}
+.shell{position:absolute;left:0;top:0;width:3.2rem;height:3.2rem;z-index:25;pointer-events:none;
+  border-radius:50% 50% 50% 20%;background:linear-gradient(180deg,#F0C86A,#B4763C 70%,#6E4426);
+  box-shadow:0 0 1.6rem rgba(255,190,90,.9);will-change:transform;}
+.shell::after{content:"";position:absolute;right:.6rem;top:.6rem;width:1.2rem;height:1.2rem;border-radius:50%;
+  background:rgba(255,240,200,.9);}
+.trail{position:absolute;width:1.2rem;height:1.2rem;border-radius:50%;background:rgba(255,180,90,.75);
+  z-index:24;pointer-events:none;transition:opacity .5s ease;}
+.spark{position:absolute;width:.9rem;height:.9rem;border-radius:50%;background:#FFD37A;z-index:27;
+  box-shadow:0 0 1rem #FFB347;pointer-events:none;}
+.boom{position:absolute;z-index:28;pointer-events:none;width:26rem;height:26rem;margin:-13rem 0 0 -13rem;
+  border-radius:50%;background:radial-gradient(circle,rgba(255,240,190,.95),rgba(255,170,70,.55) 35%,rgba(255,120,60,0) 70%);
+  animation:boom .55s ease-out forwards;}
+@keyframes boom{from{transform:scale(.2);opacity:1}to{transform:scale(1.5);opacity:0}}
+.caption{position:absolute;left:3rem;right:3rem;bottom:calc(26rem + env(safe-area-inset-bottom));z-index:29;
+  background:rgba(28,21,16,.84);color:#F6E7CE;border-radius:1.6rem;padding:1.9rem 2.3rem;backdrop-filter:blur(6px);
+  border:1px solid rgba(243,225,196,.2);opacity:0;transform:translateY(1.2rem);transition:.4s ease;
+  font-size:2.3rem;line-height:1.8;}
+.caption.on{opacity:1;transform:none;}
+.replay{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(18.6rem + env(safe-area-inset-bottom));z-index:30;
+  border:1px solid rgba(243,225,196,.45);background:rgba(28,21,16,.8);color:#F6E7CE;border-radius:99rem;
+  padding:1rem 2.6rem;font-size:2.1rem;letter-spacing:.12em;opacity:0;pointer-events:none;transition:.3s ease;}
+.replay.on{opacity:1;pointer-events:auto;}
+
+/* 图片缺失占位 */
+.slot{background:
+  repeating-linear-gradient(45deg,#E7D8BF,#E7D8BF 1.6rem,#E2D2B6 1.6rem,#E2D2B6 3.2rem);}
+.slot::after{content:"";}
+.slot.empty::after{content:attr(data-ph);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:1.9rem;letter-spacing:.12em;color:#9A7B4F;border:2px dashed rgba(154,123,79,.55);border-radius:inherit;
+  text-align:center;padding:1rem;background:repeating-linear-gradient(45deg,#E7D8BF,#E7D8BF 1.6rem,#E2D2B6 1.6rem,#E2D2B6 3.2rem);}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="view"></div>
+
+  <!-- 全站统一大号翻页导航 -->
+  <nav class="snav" id="snav">
+    <button class="ar" id="navPrev">‹</button>
+    <div class="mid">
+      <b id="navIdx">01 / 09</b>
+      <span id="navName">叶坪景区</span>
+      <em id="navDay">Day 1 · 瑞金</em>
+    </div>
+    <button class="ar" id="navNext">›</button>
+  </nav>
+
+  <div id="modalHost"></div>
+</div>
+
+<script>
+/* =========================================================
+   1. 数据：改文案 / 改图片路径都在这里
+   ========================================================= */
+const DATA = {
+  title:'赣州红色客家三日游大环线',
+  sub:'红色故土 · 客家围屋 · 千年古村',
+  note:'路线示意，开放与通行以现场为准',
+  days:[
+    {n:1,name:'瑞金线',theme:'红色初心寻访',color:'#A8322B',img:'images/day1.jpg'},
+    {n:2,name:'龙南线',theme:'客家围屋探秘',color:'#B4763C',img:'images/day2.jpg'},
+    {n:3,name:'赣县线',theme:'古村客家寻根',color:'#4C6B57',img:'images/day3.jpg'}
+  ],
+  stations:[
+    {id:'yeping',no:1,day:1,name:'叶坪景区',kind:'yeping',
+     img:'images/yeping.jpg', lead:'中华苏维埃共和国临时中央政府的诞生地'},
+    {id:'zidan',no:2,day:1,name:'子弹塔',kind:'std',img:'images/zidan.jpg',
+     lead:'一座形似子弹的纪念塔',
+     paras:[
+       '红军烈士纪念塔矗立在叶坪的草坪上，塔身下宽上窄、直指天空，形状像一枚立起来的子弹，当地人因此叫它「子弹塔」。',
+       '1934 年建成，是为纪念在历次战斗中牺牲的红军将士。塔前的草地上，用鹅卵石铺着一行大字——「踏着先烈血迹前进」。',
+       '塔身四周嵌着石碑与浮雕，碑文记录着牺牲者的名字。抬头看，塔顶的红星与身后的青松连成一线，是叶坪最肃穆的一景。'
+     ], gallery:['烈士纪念塔','标语石刻','研学实拍']},
+    {id:'leiji',no:3,day:1,name:'雷击树',kind:'tree',img:'images/leiji-bg.jpg',
+     lead:'树身里嵌着一枚炮弹',
+     paras:[
+       '叶坪旧居后有一棵老樟树，树龄比这座村庄的许多房子都长。相传中央苏区时期，敌机轰炸叶坪，一枚炮弹击中了树身，弹体卡在树干里没有炸开。',
+       '炮弹就这样留在了树里，年复一年被树皮包裹。后来人们叫它「雷击树」——既指雷火，也指那场战火。',
+       '它不算纪念馆里的展品，没有玻璃柜，也没有说明牌；但每一个走到树下抬头看的人，都会停顿一下。'
+     ]},
+    {id:'hongjing',no:4,day:1,name:'红井',kind:'std',img:'images/hongjing.jpg',
+     lead:'吃水不忘挖井人',
+     paras:[
+       '1933 年，毛泽东带领红军战士和乡亲在沙洲坝挖下这口井。此前村里只能喝浑浊的塘水，井成之后，清泉终年不涸。',
+       '井旁立着一块石碑，刻着「吃水不忘挖井人，时刻想念毛主席」。1950 年，当地群众为纪念挖井而刻下这行字。',
+       '红井不深，井台用青石砌成，辘轳与麻绳还架在井口。伸手探一探，井水的凉意会顺着指缝上来。'
+     ], gallery:['井台','雕塑展示','沙洲坝旧居']},
+    {id:'shike',no:5,day:2,name:'世客围',kind:'std',img:'images/shike.jpg',
+     lead:'世界客家民俗文化城',
+     paras:[
+       '客家民系的形成，与中原汉人的五次大规模南迁密切相关。永嘉之乱、黄巢起义、宋室南渡……一次次迁徙把中原的礼俗、语言与建筑带到赣南。',
+       '世客围以围屋形制做展馆外形，里面按「迁徙—定居—繁衍」三条线布展：客家方言、蓝衫、花灯、竹编器物依次展开。',
+       '在这里最容易看懂的，是「客」字背后的生活史——从哪里来，为什么走，又怎样在异乡把日子过成自己的样子。'
+     ], gallery:['民俗展示','迁徙路线','客家服饰']},
+    {id:'guanxi',no:6,day:2,name:'关西围',kind:'std',img:'images/guanxi.jpg',
+     lead:'方形围屋与它的迷宫',
+     paras:[
+       '关西新围建于清代嘉庆年间，平面近方形，四角设炮楼，外墙以夯土与砖石混砌，墙面密布射击孔——整座建筑就是一座可以住人的堡垒。',
+       '从中央大门进去，天井、厅堂、走马廊层层递进，内廊相互贯通。第一次进去很容易绕不出来，本地人管这叫「围屋迷宫」。',
+       '围屋门前的半月形水塘不只是风水，也兼作消防水源。夯土墙的横向层理、天井的通风采光，都是就地取材的智慧。'
+     ], gallery:['围屋正面','廊内与天井','围屋胡同']},
+    {id:'bailu',no:7,day:3,name:'白鹭村',kind:'std',img:'images/bailu.jpg',
+     lead:'千年古村，钟氏聚居',
+     paras:[
+       '白鹭古村有千年历史，钟氏宗族世代聚居。村中保存着成片的赣派建筑、宗祠与民居，马头墙层层叠叠，青石板路串起「白鹭十景」。',
+       '村落依山傍水，宗祠居中——太守敬公祠、王太夫人祠是其中的代表。家规家训刻在门楣、写进族谱，宗族文化在这里不是抽象概念，而是一砖一木的秩序。',
+       '名字的来历有两种说法：一说早年村前溪畔白鹭群栖，一说地形如白鹭展翅。站在村口回头看，两种说法都像。'
+     ], gallery:['宗祠门楼','建筑石雕','王太夫人祠']},
+    {id:'kejia',no:8,day:3,name:'客家文化城',kind:'std',img:'images/kejia.jpg',
+     lead:'牌坊、许愿缸与花灯',
+     paras:[
+       '从石牌坊进去，客家文化城把散落在赣南各地的客家记忆收进一处：许愿缸、客家博物馆、非遗展陈依次展开，一条线走完迁徙史与民俗。',
+       '客家山歌、酿豆腐、客家婚俗、花灯制作——这些非遗项目至今仍活在日常里，逢年过节就能看见它们重新亮起来。',
+       '围屋住人，宗祠敬祖，花灯祈福。三种建筑、三种仪式，说的其实是同一件事：把「家」安顿下来。'
+     ], gallery:['许愿缸','非遗展示','花灯']},
+    {id:'fushou',no:9,day:3,name:'福寿沟博物馆',kind:'std',img:'images/fushou.jpg',
+     lead:'千年不涝的地下城',
+     paras:[
+       '北宋年间，赣州知州刘彝主持修建了福寿沟——两条环城地下排水道，因走向形似「福」「寿」二字而得名。',
+       '福寿沟最巧的是「水窗」：利用水位差自动启闭，江水上涨时关闭防倒灌，城内积水时开启排入江中。',
+       '这套系统运转了近千年，赣州古城至今仍有部分沟段在服役。博物馆里可以看到九连山的生态科普、数字化复原和古城的剖面模型。'
+     ], gallery:['九连山科普','数字化展示','古城剖面']}
+  ]
+};
+
+const BOARDS = [
+  {t:'中华苏维埃共和国临时中央政府诞生地',c:'1931 年 11 月，中华苏维埃共和国临时中央政府在叶坪宣告成立。这个位于赣南山村的国家政权，是中国共产党领导建立的第一个全国性红色政权。'},
+  {t:'1931.11.7 · 第一次全国苏维埃代表大会',c:'第一次全国苏维埃代表大会在叶坪谢氏宗祠召开，来自全国各苏区的代表齐聚于此。大会通过了宪法大纲、土地法、劳动法等一系列法令。'},
+  {t:'临时中央政府机构与毛泽东就任主席',c:'大会选举毛泽东为中央执行委员会主席。临时中央政府下设外交、军事、财政、土地、劳动等人民委员会，在祠堂的一间间厢房里办公。'},
+  {t:'红军检阅台：阅兵与宣誓的地方',c:'叶坪广场上建有红军检阅台。红军部队在这里接受检阅，新战士在这里宣誓入伍，广场也是苏区群众集会与庆祝的场所。'},
+  {t:'红军烈士纪念塔简介',c:'纪念塔 1934 年建成，塔身如子弹直指天空，塔前草地用鹅卵石铺成「踏着先烈血迹前进」，是苏区牺牲将士的集体纪念碑。'},
+  {t:'公略亭：纪念黄公略',c:'公略亭为纪念红三军军长黄公略而建。1931 年黄公略在战斗中牺牲，苏区以建亭、命名等方式纪念这位年轻的红军将领。'},
+  {t:'博生堡：纪念赵博生',c:'博生堡为纪念红五军团副总指挥赵博生而建。堡体为砖石结构，形制方正，与公略亭分列广场两侧，共同构成纪念建筑群。'},
+  {t:'中央印刷厂 / 国家银行旧址',c:'苏区的纸币、公债与报纸在这里印刷。国家银行旧址内设有金库与营业厅，是红色金融最早的实践现场之一。'},
+  {t:'红军邮政与交通线',c:'苏区建立了自己的邮政与交通线，邮件经由秘密交通站接力传递。这些线路同时承担情报与人员往来的任务。'},
+  {t:'大樟树与防空洞：领导人隐蔽处',c:'叶坪旧居后有一棵大樟树，树下曾设防空洞。敌机轰炸时，这里是领导人与群众隐蔽的地方，树身至今留有当年的痕迹。'}
+];
+
+/* =========================================================
+   2. 图片槽位：缺图时显示占位提示
+   ========================================================= */
+window.__imgFail = function(el){
+  el.style.visibility='hidden';
+  var p=el.parentNode;
+  if(p){ p.classList.add('slot','empty'); }
+};
+function img(src, alt, ph){
+  return `<img src="${src}?v=20261123" alt="${alt||''}" onerror="__imgFail(this)">`;
+}
+function slot(src, ph, cls, inner){
+  return `<div class="slot ${cls||''}" data-ph="${ph||'图片位置'}">
+    <img class="${inner||''}" src="${src}?v=20261123" alt="" onerror="__imgFail(this)">
+  </div>`;
+}
+
+/* =========================================================
+   3. 视图
+   ========================================================= */
+const view=document.getElementById('view');
+const modalHost=document.getElementById('modalHost');
+const NAV=document.getElementById('snav');
+
+/* ---------- 首页：Day1 / Day2 / Day3 ---------- */
+function homeView(){
+  const cards = DATA.days.map(d=>{
+    const subs = DATA.stations.filter(s=>s.day===d.n).map(s=>`<li>${s.name}</li>`).join('');
+    return `<article class="daycard" data-day="${d.n}">
+      <div class="pic slot" data-ph="替换图片：${d.img}" data-go="${DATA.stations.find(s=>s.day===d.n).id}">
+        <img src="${d.img}?v=20261123" alt="${d.name}" onerror="__imgFail(this)">
+        <span class="tag">Day ${d.n}</span>
+        <span class="enter">进入线路 ›</span>
+      </div>
+      <div class="txt">
+        <h3>${d.name}</h3>
+        <p class="theme">${d.theme}</p>
+        <ul class="subs">${subs}</ul>
+      </div>
+    </article>`;
+  }).join('');
+
+  return `<section class="screen" id="home">
+    <div class="home-head">
+      <h1>赣州红色客家<br>三日游大环线</h1>
+      <div class="sub">${DATA.sub}</div>
+      <div class="line"></div>
+    </div>
+    <div class="days">${cards}</div>
+    <p class="home-note">${DATA.note}</p>
+  </section>`;
+}
+
+/* ---------- 标准图文页 ---------- */
+function stdView(s){
+  const day=DATA.days[s.day-1];
+  return `<section class="screen" id="${s.id}">
+    <div class="top">
+      <button class="back" data-go="home">‹</button>
+      <span class="ttl">${s.name}</span>
+      <span class="day" style="background:${day.color}">Day ${day.n}</span>
+    </div>
+    <div class="hero slot" data-ph="替换图片：${s.img}">
+      <img src="${s.img}?v=20261123" alt="${s.name}" onerror="__imgFail(this)">
+      <div class="veil"></div>
+      <div class="cap">
+        <span class="no">${s.no}</span>
+        <h2>${s.name}</h2>
+        <div class="lead">${s.lead}</div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="rule"><span>关于这处</span></div>
+      ${s.paras.map(p=>`<p>${p}</p>`).join('')}
+    </div>
+    <div class="strip">
+      <div class="hd"><b>实拍小图</b><em>左右滑动 ›</em></div>
+      <div class="rail">
+        ${s.gallery.map((g,i)=>{
+          const src=`images/${s.id}-${i+1}.jpg`;
+          return `<figure class="slot" data-ph="替换：${src}">
+            <img class="ph" src="${src}?v=20261123" alt="" onerror="this.onerror=null;this.src='${s.img}?v=20261123'">
+            <figcaption>${g}</figcaption></figure>`;
+        }).join('')}
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ---------- 重点页 A：叶坪科普板 ---------- */
+function yepingView(){
+  const s=DATA.stations[0], day=DATA.days[0];
+  const mk=(side)=>[0,1,2,3,4].map(k=>{
+    const idx = side==='l'? k : k+5;
+    return `<div class="plank" data-board="${idx}"><span>${String(idx+1).padStart(2,'0')}</span><b>${BOARDS[idx].t}</b></div>`;
+  }).join('');
+  return `<section class="screen" id="yeping">
+    <div class="corr-stage">
+      <img class="bg" src="images/yeping-bg.jpg?v=20261123" alt="" onerror="this.style.display='none'">
+      <div class="corr-veil"></div>
+      <div class="corr">
+        <div class="wall l">${mk('l')}</div>
+        <div class="wall r">${mk('r')}</div>
+      </div>
+      <div class="corr-top">
+        <button class="back" data-go="home">‹</button>
+        <span class="info">Day ${day.n} · ${s.name} · 科普板</span>
+        <span class="cnt" id="readCnt">已读 0 / 10</span>
+      </div>
+      <div class="corr-hint">点击两侧墙上的科普板开始探索</div>
+    </div>
+  </section>`;
+}
+
+/* ---------- 重点页 B：雷击树 ---------- */
+function leijiView(){
+  const s=DATA.stations[2], day=DATA.days[0];
+  return `<section class="screen" id="leiji">
+    <div class="tree-stage slot" id="treeStage" data-ph="替换背景图：${s.img}">
+      <img class="bg" src="${s.img}?v=20261123" alt="" onerror="this.style.display='none'">
+    </div>
+    <div class="veil-top"></div>
+    <div class="leiji-top">
+      <button class="back" data-go="home">‹</button>
+      <span class="t">Day ${day.n} · ${s.name}</span>
+    </div>
+    <button class="fire-btn" id="fireBtn">发射<br>炮弹</button>
+    <div class="caption" id="caption">炮弹嵌进树身，留下了一道再也不会愈合的伤口，也留下了一段看得见的历史。</div>
+    <button class="replay" id="replayBtn">↻ 重播</button>
+    <div class="drawer" id="drawer">
+      <div class="grip"></div>
+      <h3>雷击树 · 一段看得见的历史 <em>点此展开 ›</em></h3>
+      <div class="txt">
+        <p>叶坪旧居后有一棵老樟树，树龄比这座村庄的许多房子都长。相传中央苏区时期，敌机轰炸叶坪，一枚炮弹击中了树身，弹体卡在树干里没有炸开。</p>
+        <p>炮弹就这样留在了树里，年复一年被树皮包裹。后来人们叫它「雷击树」——既指雷火，也指那场战火。</p>
+        <p>它不算纪念馆里的展品，没有玻璃柜，也没有说明牌。但每一个走到树下抬头看的人，都会停顿一下。</p>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* =========================================================
+   4. 构建 & 路由
+   ========================================================= */
+const SCREENS={};
+function build(){
+  view.innerHTML = homeView() + DATA.stations.map(s=>{
+    if(s.kind==='yeping') return yepingView();
+    if(s.kind==='tree') return leijiView();
+    return stdView(s);
+  }).join('');
+  document.querySelectorAll('.screen').forEach(el=>SCREENS[el.id]=el);
+  restoreReads();
+}
+
+let cur='home';
+function go(id){
+  if(!SCREENS[id]) return;
+  if(id===cur && SCREENS[id].classList.contains('on')) return;
+  const old=SCREENS[cur];
+  if(old && old!==SCREENS[id]){ old.classList.remove('on'); old.classList.add('out'); setTimeout(()=>old.classList.remove('out'),360); }
+  const t=SCREENS[id];
+  t.classList.add('on'); t.scrollTop=0;
+  cur=id;
+  history.replaceState(null,'','#'+id);
+  syncNav();
+  if(id==='leiji') resetTree();
+  if(id==='yeping') paintReads();
+}
+function syncNav(){
+  const s=DATA.stations.find(x=>x.id===cur);
+  if(!s){ NAV.classList.remove('on'); return; }
+  NAV.classList.add('on');
+  const i=DATA.stations.indexOf(s);
+  const prev=DATA.stations[i-1], next=DATA.stations[i+1];
+  document.getElementById('navIdx').textContent = String(s.no).padStart(2,'0')+' / '+String(DATA.stations.length).padStart(2,'0');
+  document.getElementById('navName').textContent = s.name;
+  document.getElementById('navDay').textContent = next
+    ? ('下一站 · ' + next.name)
+    : '已是最后一站 · 返回大环线';
+  const bp=document.getElementById('navPrev'), bn=document.getElementById('navNext');
+  bp.dataset.target = prev? prev.id : 'home';
+  bn.dataset.target = next? next.id : 'home';
+  bp.setAttribute('aria-label', prev? ('上一站 '+prev.name) : '返回首页');
+  bn.setAttribute('aria-label', next? ('下一站 '+next.name) : '返回首页');
+}
+function step(dir){
+  if(!DATA.stations.some(s=>s.id===cur)) return;
+  const i=DATA.stations.findIndex(s=>s.id===cur);
+  const t=DATA.stations[i+dir];
+  go(t? t.id : 'home');
+}
+
+document.addEventListener('click', e=>{
+  const nav=e.target.closest('#navPrev');
+  if(nav){ step(-1); return; }
+  const nav2=e.target.closest('#navNext');
+  if(nav2){ step(1); return; }
+
+  const g=e.target.closest('[data-go]');
+  if(g){ go(g.dataset.go); return; }
+  const p=e.target.closest('[data-board]');
+  if(p){ openBoard(+p.dataset.board); return; }
+  if(e.target.closest('[data-close]')){ closeBoard(); return; }
+  if(e.target.closest('#fireBtn')){ fire(); return; }
+  if(e.target.closest('#replayBtn')){ resetTree(); setTimeout(fire,120); return; }
+
+  // 雷击树抽屉
+  const d=document.getElementById('drawer');
+  if(cur==='leiji' && d && !e.target.closest('.fire-btn') && !e.target.closest('.replay')
+     && !e.target.closest('.leiji-top')){
+    if(!d.classList.contains('open')) d.classList.add('open');
+    else if(!e.target.closest('.txt')) d.classList.remove('open');
+  }
+});
+window.addEventListener('hashchange',()=>{
+  const id=(location.hash||'').replace('#','');
+  if(SCREENS[id]) go(id);
+});
+
+/* =========================================================
+   5. 叶坪科普板
+   ========================================================= */
+let bIdx=0;
+const READ_KEY='yeping-read';
+let readSet=new Set();
+function restoreReads(){
+  try{ readSet=new Set(JSON.parse(localStorage.getItem(READ_KEY)||'[]')); }catch(e){ readSet=new Set(); }
+  paintReads();
+}
+function saveReads(){
+  try{ localStorage.setItem(READ_KEY,JSON.stringify([...readSet])); }catch(e){}
+  paintReads();
+}
+function paintReads(){
+  document.querySelectorAll('.plank').forEach(el=>el.classList.toggle('read',readSet.has(+el.dataset.board)));
+  const c=document.getElementById('readCnt');
+  if(c) c.textContent=`已读 ${readSet.size} / 10`;
+}
+function openBoard(i){
+  bIdx=i;
+  modalHost.innerHTML=`<div class="board-modal on">
+    <div class="mask" data-close="1"></div>
+    <div class="board-card">
+      <div class="bar"></div>
+      <button class="close" data-close="1">✕</button>
+      <div class="inner">
+        <div class="no" id="bNo"></div>
+        <h3 id="bTitle"></h3>
+        <p id="bText"></p>
+        <div class="foot">
+          <div class="dots" id="bDots"></div>
+          <div class="nav"><button data-step="-1">‹</button><button data-step="1">›</button></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  paintBoard();
+  modalHost.querySelectorAll('[data-step]').forEach(b=>{
+    b.addEventListener('click',ev=>{ ev.stopPropagation(); stepBoard(+b.dataset.step); });
+  });
+  const card=modalHost.querySelector('.board-card');
+  let sx=0,sy=0;
+  card.addEventListener('touchstart',ev=>{ sx=ev.touches[0].clientX; sy=ev.touches[0].clientY; },{passive:true});
+  card.addEventListener('touchend',ev=>{
+    const dx=ev.changedTouches[0].clientX-sx, dy=ev.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)) stepBoard(dx>0?-1:1);
+  },{passive:true});
+}
+function stepBoard(d){ bIdx=(bIdx+d+BOARDS.length)%BOARDS.length; paintBoard(); }
+function paintBoard(){
+  const b=BOARDS[bIdx];
+  document.getElementById('bNo').textContent=`科普板 ${String(bIdx+1).padStart(2,'0')} / 10`;
+  document.getElementById('bTitle').textContent=b.t;
+  document.getElementById('bText').textContent=b.c;
+  document.getElementById('bDots').textContent=`${bIdx+1} / ${BOARDS.length}`;
+  readSet.add(bIdx); saveReads();
+}
+function closeBoard(){ modalHost.innerHTML=''; }
+
+/* =========================================================
+   6. 雷击树：炮弹动画（独立图层，不画进背景）
+   ========================================================= */
+let flying=false, rafId=null;
+function resetTree(){
+  const st=document.getElementById('treeStage'); if(!st) return;
+  st.classList.remove('shake');
+  st.querySelectorAll('.shell,.boom,.spark,.trail').forEach(el=>el.remove());
+  const c=document.getElementById('caption'); if(c) c.classList.remove('on');
+  const r=document.getElementById('replayBtn'); if(r) r.classList.remove('on');
+  flying=false; if(rafId) cancelAnimationFrame(rafId);
+}
+function fire(){
+  if(flying) return;
+  const st=document.getElementById('treeStage'); if(!st) return;
+  flying=true;
+  const rect=st.getBoundingClientRect();
+  /* 弹道：起点左下 → 顶点 → 命中点（改这三个系数即可调轨迹） */
+  const p0={x:-30, y:rect.height*0.92};
+  const p2={x:rect.width*0.525, y:rect.height*0.185};
+  const p1={x:rect.width*0.16, y:rect.height*0.42};
+  const shell=document.createElement('div'); shell.className='shell'; st.appendChild(shell);
+  const dur=820, t0=performance.now();
+  let lastTrail=0;
+  const bez=t=>{ const u=1-t; return {
+    x:u*u*p0.x+2*u*t*p1.x+t*t*p2.x,
+    y:u*u*p0.y+2*u*t*p1.y+t*t*p2.y }; };
+  function frame(now){
+    const t=Math.min(1,(now-t0)/dur);
+    const p=bez(t), pn=bez(Math.min(1,t+0.01));
+    const ang=Math.atan2(pn.y-p.y,pn.x-p.x)*180/Math.PI;
+    shell.style.transform=`translate(${p.x}px,${p.y}px) rotate(${ang}deg)`;
+    if(now-lastTrail>38 && t<0.96){
+      lastTrail=now;
+      const tr=document.createElement('div'); tr.className='trail';
+      tr.style.cssText=`left:${p.x}px;top:${p.y}px;opacity:.85;filter:blur(1px)`;
+      st.appendChild(tr);
+      setTimeout(()=>{ tr.style.opacity=0; setTimeout(()=>tr.remove(),520); },200);
+    }
+    if(t<1) rafId=requestAnimationFrame(frame);
+    else impact(p2,st);
+  }
+  rafId=requestAnimationFrame(frame);
+}
+function impact(pt,st){
+  st.classList.add('shake');
+  setTimeout(()=>st.classList.remove('shake'),520);
+  const boom=document.createElement('div'); boom.className='boom';
+  boom.style.left=pt.x+'px'; boom.style.top=pt.y+'px';
+  st.appendChild(boom); setTimeout(()=>boom.remove(),600);
+  for(let i=0;i<14;i++){
+    const s=document.createElement('div'); s.className='spark';
+    const a=Math.random()*Math.PI*2, r=40+Math.random()*120;
+    s.style.left=pt.x+'px'; s.style.top=pt.y+'px';
+    st.appendChild(s);
+    s.animate([
+      {transform:'translate(-50%,-50%) scale(1)',opacity:1},
+      {transform:`translate(${Math.cos(a)*r-50}%,${Math.sin(a)*r-50}%) scale(.2)`,opacity:0}
+    ],{duration:520+Math.random()*320,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>s.remove();
+  }
+  const sh=st.querySelector('.shell'); if(sh){ sh.style.transition='opacity .7s ease'; setTimeout(()=>{ sh.style.opacity='0'; },260); }
+  setTimeout(()=>{
+    const c=document.getElementById('caption'); if(c) c.classList.add('on');
+    const r=document.getElementById('replayBtn'); if(r) r.classList.add('on');
+    flying=false;
+  },320);
+}
+
+/* =========================================================
+   7. 启动
+   ========================================================= */
+build();
+const init=(location.hash||'').replace('#','');
+if(init && init!=='home' && SCREENS[init]){
+  cur='home'; SCREENS.home.classList.remove('on'); go(init);
+}else{
+  cur='home'; SCREENS.home.classList.add('on'); syncNav();
+}
+</script>
+</body>
+</html>
